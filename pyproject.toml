@@ -34,7 +34,7 @@ dl = [
 # LLM clients
 llm = [
     "anthropic>=0.97.0",
-    "openai>=1.55",
+    "openai>=2.33.0",
     "tiktoken>=0.8",
 ]
 
@@ -47,14 +47,14 @@ rag = [
 
 # Agents: frameworks + tool infra
 agents = [
-    "langgraph>=1.1.9",
-    "pydantic-ai>=1.87.0",
+    "langgraph>=1.1.10",
+    "pydantic-ai>=1.89.1",
 ]
 
 # Evaluation + observability
 eval = [
-    "arize-phoenix>=14.15.0",
-    "langsmith>=0.7.37",
+    "arize-phoenix>=14.17.0",
+    "langsmith>=0.8.0",
 ]
 
 # Web API
