@@ -1,0 +1,13 @@
+# NOTICE
+
+This project is based in part on the structure of **Cookiecutter Data Science**
+by DrivenData, Inc. (2016), licensed under the MIT License.
+
+- Upstream project: https://github.com/drivendata/cookiecutter-data-science
+- Original copyright: Copyright (c) 2016 DrivenData, Inc.
+
+All original contributions in this repository are:
+
+Copyright (c) 2025 Sagar Gupta
+
+Both sets of contributions are distributed under the MIT License (see LICENSE).
