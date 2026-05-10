@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import UTC, datetime
 
 logger = logging.getLogger(__name__)
@@ -12,7 +12,7 @@ class Feedback:
     run_id: str
     score: int  # -1, 0, 1 (thumbs down / neutral / up)
     comment: str = ""
-    timestamp: datetime = datetime.now(UTC)
+    timestamp: datetime = field(default_factory=lambda: datetime.now(UTC))
 
 
 def record_feedback(feedback: Feedback) -> None:
