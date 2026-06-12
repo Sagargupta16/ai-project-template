@@ -1,6 +1,6 @@
 # AI Project Template
 
-A unified Python starter for **every AI use case** — classical ML, deep learning, LLM apps, RAG, and agents. One layout, optional extras, opinionated tooling.
+A unified Python starter for **every AI use case** -- classical ML, deep learning, LLM apps, RAG, and agents. One layout, optional extras, opinionated tooling.
 
 ## Why this template
 
@@ -26,7 +26,7 @@ make notebook          # Jupyter
 
 ## Extras
 
-Base install is deliberately lean — just `pydantic`, `pydantic-settings`, `python-dotenv`, `tqdm`. Everything heavy is an opt-in extra:
+Base install is deliberately lean -- just `pydantic`, `pydantic-settings`, `python-dotenv`, `tqdm`. Everything heavy is an opt-in extra:
 
 | Extra | Adds | Use when |
 |-------|------|----------|
@@ -62,7 +62,8 @@ ai-project-template/
   notebooks/       # numbered exploratory notebooks
   data/            # raw/ interim/ processed/ external/
   models/          # trained artifacts (gitignored)
-  docker/          # Dockerfiles for per-service builds
+  Dockerfile       # uv-based image serving the FastAPI app
+  docker-compose.yml  # api + notebook services
   AGENTS.md        # canonical spec for coding agents
   CLAUDE.md        # points at AGENTS.md (Claude Code)
   pyproject.toml   # deps, ruff, pytest, mypy
@@ -73,16 +74,16 @@ ai-project-template/
 
 The most common confusion in AI projects is **where does X go?** This template enforces a clear split:
 
-- **`agents/`** — LLM loops. Decides what to do next.
-- **`tools/`** — stateless callables an agent invokes. Pure input → output.
-- **`services/`** — business logic, DB, external APIs. No LLM control flow.
-- **`workflows/`** — deterministic pipelines that call LLMs on a fixed path.
+- **`agents/`** -- LLM loops. Decides what to do next.
+- **`tools/`** -- stateless callables an agent invokes. Pure input → output.
+- **`services/`** -- business logic, DB, external APIs. No LLM control flow.
+- **`workflows/`** -- deterministic pipelines that call LLMs on a fixed path.
 
 If you feel the urge to put an LLM loop in `services/`, stop and move it to `agents/`.
 
 ## Configuration
 
-Single source of truth: [`src/core/config.py`](src/core/config.py). Loaded via `get_settings()` (cached). Override everything through environment variables — see [`.env.example`](.env.example). Nested settings use `__` as delimiter: `LLM__MODEL=claude-opus-4-7` or the flat prefix form `LLM_MODEL=claude-opus-4-7`.
+Single source of truth: [`src/core/config.py`](src/core/config.py). Loaded via `get_settings()` (cached). Override everything through environment variables -- see [`.env.example`](.env.example). Nested settings use `__` as delimiter: `LLM__MODEL=claude-sonnet-4-6` or the flat prefix form `LLM_MODEL=claude-sonnet-4-6`.
 
 ## Evaluation
 
@@ -91,9 +92,9 @@ Golden dataset lives in [`src/evals/datasets/golden.jsonl`](src/evals/datasets/g
 ## Observability
 
 `src/observability/` wraps:
-- **Tracing** — OpenTelemetry, backend-agnostic (Phoenix, LangSmith, MLflow Tracing).
-- **Cost tracking** — aggregate LLM spend per run and per model.
-- **Feedback** — capture thumbs-up/down from users for online evals.
+- **Tracing** -- OpenTelemetry, backend-agnostic (Phoenix, LangSmith, MLflow Tracing).
+- **Cost tracking** -- aggregate LLM spend per run and per model.
+- **Feedback** -- capture thumbs-up/down from users for online evals.
 
 Call `setup_tracing()` once at app boot. Don't scatter instrumentation across business logic.
 
@@ -113,4 +114,4 @@ Call `setup_tracing()` once at app boot. Don't scatter instrumentation across bu
 
 ## License
 
-MIT — see [LICENCE](LICENCE).
+MIT -- see [LICENSE](LICENSE).
