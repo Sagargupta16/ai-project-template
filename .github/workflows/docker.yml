@@ -61,7 +61,7 @@ jobs:
       - name: Trivy vulnerability scan
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
-          image-ref: ${{ github.event_name == 'pull_request' && format('{0}/{1}:pr-{2}', env.REGISTRY, env.IMAGE_NAME, github.event.pull_request.number) || fromJSON(steps.meta.outputs.json).tags[0] }}
+          image-ref: ${{ fromJSON(steps.meta.outputs.json).tags[0] }}
           format: sarif
           output: trivy-results.sarif
           severity: CRITICAL,HIGH

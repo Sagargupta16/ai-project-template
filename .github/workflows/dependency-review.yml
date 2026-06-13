@@ -21,3 +21,6 @@ jobs:
           comment-summary-in-pr: on-failure
           license-check: true
           deny-licenses: GPL-3.0, AGPL-3.0
+          # CI-only GitHub Actions are build tooling, not distributed deps, so their
+          # licenses do not contaminate the project. trufflehog is AGPL-3.0.
+          allow-dependencies-licenses: pkg:githubactions/trufflesecurity/trufflehog
