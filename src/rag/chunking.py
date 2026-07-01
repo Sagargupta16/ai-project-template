@@ -18,7 +18,10 @@ def chunk_text(text: str, chunk_size: int | None = None, overlap: int | None = N
     """Split text into overlapping chunks. Replace with a semantic splitter for production."""
     settings = get_settings()
     size = chunk_size or settings.rag.chunk_size
-    step = size - (overlap or settings.rag.chunk_overlap)
+    overlap = settings.rag.chunk_overlap if overlap is None else overlap
+    step = size - overlap
+    if step <= 0:
+        raise ValueError(f"overlap ({overlap}) must be smaller than chunk size ({size})")
 
     chunks: list[Chunk] = []
     for i in range(0, len(text), step):
