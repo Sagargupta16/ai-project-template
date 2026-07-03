@@ -1,5 +1,10 @@
 # AI Project Template
 
+[![CI](https://github.com/Sagargupta16/ai-project-template/actions/workflows/ci.yml/badge.svg)](https://github.com/Sagargupta16/ai-project-template/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/Sagargupta16/ai-project-template/actions/workflows/codeql.yml/badge.svg)](https://github.com/Sagargupta16/ai-project-template/actions/workflows/codeql.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python 3.13+](https://img.shields.io/badge/python-3.13%2B-blue.svg)](https://www.python.org/downloads/)
+
 A unified Python starter for **every AI use case** -- classical ML, deep learning, LLM apps, RAG, and agents. One layout, optional extras, opinionated tooling.
 
 ## Why this template
