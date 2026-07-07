@@ -4,7 +4,7 @@ Instructions for coding agents (Claude Code, Codex, Cursor, Aider, Gemini CLI, W
 
 ## What this repo is
 
-A **unified Python template** for AI projects — classical ML, deep learning, LLM apps, RAG, and agents. Fork it when starting a new project; do not treat it as a running application.
+A **unified Python template** for AI projects -- classical ML, deep learning, LLM apps, RAG, and agents. Fork it when starting a new project; do not treat it as a running application.
 
 Python **3.13+** is required (pinned in `.python-version` and `pyproject.toml`).
 
@@ -56,23 +56,23 @@ If you're about to put a tool into `services/` or an agent into `tools/`, stop a
 ## Core conventions
 
 1. **Every `.py` file starts with `from __future__ import annotations`.** No exceptions.
-2. **Config is centralized** in [src/core/config.py](src/core/config.py) as a `pydantic-settings` model with nested sub-settings (`ml`, `llm`, `rag`, `observability`). Load via `get_settings()` — cached. Override via environment: `LLM_MODEL=claude-opus-4-7`, `RAG_TOP_K=10`, etc. Nested delimiter is `__`.
+2. **Config is centralized** in [src/core/config.py](src/core/config.py) as a `pydantic-settings` model with nested sub-settings (`ml`, `llm`, `rag`, `observability`). Load via `get_settings()` -- cached. Override via environment: `LLM_MODEL=claude-opus-4-7`, `RAG_TOP_K=10`, etc. Nested delimiter is `__`.
 3. **Imports are absolute from project root**: `from src.core.config import get_settings`. No relative imports.
-4. **Logging**: `logger = logging.getLogger(__name__)` at module top. Use `%s`-style lazy formatting: `logger.info("loaded %d rows", n)` — never f-strings in log calls.
+4. **Logging**: `logger = logging.getLogger(__name__)` at module top. Use `%s`-style lazy formatting: `logger.info("loaded %d rows", n)` -- never f-strings in log calls.
 5. **Prompts are versioned**. Filenames: `<name>.v1.md`, `<name>.v2.md`. Register via `src.prompts.registry`. Graduate to MLflow / LangSmith / Langfuse when going to production.
 6. **Evals live in `src/evals/`**: datasets as JSONL, offline runs in `offline/`, judges (LLM-as-judge or deterministic) in `judges/`.
 7. **Data**: `data/raw/` is immutable. Derived artifacts go to `data/interim/` or `data/processed/`.
-8. **Models artifacts** (trained weights, vector indexes) go to `models/` — gitignored by default.
+8. **Models artifacts** (trained weights, vector indexes) go to `models/` -- gitignored by default.
 
 ## Tooling
 
-- **Ruff** (line 120, target py313, rules `E, F, W, I, UP, B, SIM`). `UP` will flag legacy Python — use modern syntax (`match`, `X | None`, `pathlib`).
+- **Ruff** (line 120, target py313, rules `E, F, W, I, UP, B, SIM`). `UP` will flag legacy Python -- use modern syntax (`match`, `X | None`, `pathlib`).
 - **Ruff format** with double quotes. Same tool handles lint + format.
 - **mypy** configured in `pyproject.toml`. Not enforced in CI yet; run locally.
-- **Pre-commit** blocks files >5MB. Large data does not belong in the repo — use DVC or cloud storage.
+- **Pre-commit** blocks files >5MB. Large data does not belong in the repo -- use DVC or cloud storage.
 - **pytest-asyncio** is in auto mode. Async tests do not need decorators.
 
-## Adding a new capability — where does it go?
+## Adding a new capability -- where does it go?
 
 | Capability | Location |
 |-----------|----------|
@@ -93,12 +93,12 @@ Before reporting task complete:
 - **Code changes**: `make lint` + `make test`. Both must pass.
 - **API changes**: start `make api`, hit the endpoint with curl/httpx.
 - **Eval changes**: `make eval` should run without error on the golden dataset.
-- **Never claim "done" on lint/type check alone.** Verify the behavior.
+- Do not report done from lint or type checks alone; run the behavior and cite what you observed.
 
 ## What not to do
 
 - Don't mix LLM control flow into `services/`.
-- Don't add `requirements.txt` entries — everything belongs in `pyproject.toml` extras.
+- Don't add `requirements.txt` entries -- everything belongs in `pyproject.toml` extras.
 - Don't commit `.env`, API keys, model weights, or raw data dumps.
 - Don't introduce relative imports.
 - Don't skip `from __future__ import annotations`.
