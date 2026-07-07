@@ -9,7 +9,7 @@
 > Read those first. The guidance below only adds **repo-specific context** -- it does not override anything in the root.
 
 
-This file exists for Claude Code. **The canonical agent spec is [AGENTS.md](AGENTS.md)** — Claude Code should read it in full.
+This file exists for Claude Code. **The canonical agent spec is [AGENTS.md](AGENTS.md)** -- Claude Code should read it in full.
 
 The two files intentionally mirror each other's content; `AGENTS.md` is the open cross-tool standard (Codex, Cursor, Gemini CLI, Aider, Windsurf, Jules, Devin), and this file preserves Claude Code's expected filename. If the two ever diverge, `AGENTS.md` wins.
 
