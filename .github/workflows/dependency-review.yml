@@ -24,3 +24,9 @@ jobs:
           # CI-only GitHub Actions are build tooling, not distributed deps, so their
           # licenses do not contaminate the project. trufflehog is AGPL-3.0.
           allow-dependencies-licenses: pkg:githubactions/trufflesecurity/trufflehog
+          # GHSA-f4j7-r4q5-qw2c: chromadb pre-auth code injection (CVE-2026-45829).
+          # chromadb is an OPTIONAL extra (rag), unused by the template scaffold, and
+          # has NO patched release upstream (advisory 2026-05-18, whole range <=1.5.9
+          # vulnerable). Allow-listed until chroma-core ships a fix; RAG users pin their
+          # own version. Tracked: github.com/chroma-core/chroma/issues/6717
+          allow-ghsas: GHSA-f4j7-r4q5-qw2c
