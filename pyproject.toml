@@ -38,9 +38,12 @@ llm = [
     "tiktoken>=0.8",
 ]
 
-# RAG: embeddings, vector stores, chunking
+# RAG: embeddings, chunking
+# No vector store is shipped by default. chromadb was dropped because
+# GHSA-f4j7-r4q5-qw2c (pre-auth code injection, CVE-2026-45829) has no patched
+# release, and src/rag/indexing.py is a stub with no store-specific code anyway.
+# Pick your own: chromadb, pgvector, qdrant, or lancedb.
 rag = [
-    "chromadb>=1.0",
     "sentence-transformers>=3.3",
     "langchain-text-splitters>=0.3",
 ]
