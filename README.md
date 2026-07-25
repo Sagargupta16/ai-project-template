@@ -38,7 +38,7 @@ Base install is deliberately lean -- just `pydantic`, `pydantic-settings`, `pyth
 | `ml` | numpy, pandas, sklearn, matplotlib | Classical ML, data science |
 | `dl` | torch | Deep learning |
 | `llm` | anthropic, openai, tiktoken | Calling LLMs |
-| `rag` | chromadb, sentence-transformers, langchain splitters | Building RAG |
+| `rag` | sentence-transformers, langchain splitters | Building RAG (bring your own vector store) |
 | `agents` | langgraph, pydantic-ai | Agent frameworks |
 | `eval` | arize-phoenix, langsmith | Tracing + evaluation |
 | `api` | fastapi, uvicorn, httpx | Serving a web API |
