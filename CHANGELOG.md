@@ -1,5 +1,14 @@
 # Changelog
 
+## [3.0.2] - 2026-09-21
+
+### Security
+- Add `[tool.uv] constraint-dependencies` floors for vulnerable transitive deps and re-lock:
+  - `httpx2` 2.9.1 -> 2.13.0 (high streaming decompression amplification #103, high secure WebSocket traffic sent without TLS through SOCKS proxies #98, medium conflicting Content-Length and Transfer-Encoding #102, medium multipart part header injection #101, medium quadratic SSE line buffering #99)
+  - `httpcore2` 2.9.1 -> 2.13.0 (high, secure WebSocket traffic sent without TLS through SOCKS proxies, Dependabot #100)
+- Floors are set at the advisory minimums (`httpx2>=2.12.0`, `httpcore2>=2.10.0`) rather than the resolved version, matching the 3.0.1 entries, so a future re-resolve cannot slide back under a patched version.
+- The re-lock also adds `httpx2-jsfetch` 1.0, gated behind `sys_platform == 'emscripten'`. It installs only on WASM targets, so the footprint on normal platforms is unchanged.
+
 ## [3.0.1] - 2026-09-02
 
 ### Security
