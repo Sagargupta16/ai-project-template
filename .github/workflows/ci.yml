@@ -3,13 +3,37 @@ on:
   push:
     branches: [main]
   pull_request:
+
+permissions:
+  contents: read
+
 jobs:
-  build:
-    uses: Sagargupta16/shared-workflows/.github/workflows/python-ci.yml@main
-    with:
-      run-tests: false
+  lint-test:
+    name: Lint & Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+
+      - name: Install dependencies
+        run: uv sync --locked --no-build --extra dev --extra ml --extra api
+
+      - name: Ruff check
+        run: uv run --locked --no-build ruff check .
+
+      - name: Ruff format check
+        run: uv run --locked --no-build ruff format --check .
+
+      - name: Mypy
+        run: uv run --locked --no-build mypy src
+
+      - name: Pytest
+        run: uv run --locked --no-build pytest -q
+
   security:
-    uses: Sagargupta16/shared-workflows/.github/workflows/security-scan.yml@main
+    uses: Sagargupta16/shared-workflows/.github/workflows/security-scan.yml@a90df0cdc89c85295764a85849b42d618747525a # main
     permissions:
       contents: read
       security-events: write

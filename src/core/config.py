@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from functools import lru_cache
 from pathlib import Path
+from typing import Literal
 
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -10,6 +11,9 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class MLSettings(BaseSettings):
     random_seed: int = 42
     test_size: float = 0.2
+    # RandomForestClassifier hyperparameters, defaulting to scikit-learn's own defaults.
+    min_samples_leaf: int | float = 1
+    max_features: Literal["sqrt", "log2"] | int | float | None = "sqrt"
 
     model_config = SettingsConfigDict(env_prefix="ML_")
 

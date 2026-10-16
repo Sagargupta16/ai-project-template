@@ -21,6 +21,7 @@ The `Makefile` is the canonical command interface. All commands go through `uv`.
 | Single test | `uv run pytest tests/unit/test_dataset.py::test_preprocess_drops_duplicates -v` |
 | Lint / format | `make lint` / `make format` |
 | API dev server | `make api` (requires `[api]` extra) |
+| Docker image | `docker build -t ai-project .` then `docker run -p 8000:8000 ai-project` |
 | Offline evals | `make eval` |
 | Notebook | `make notebook` |
 
@@ -68,7 +69,9 @@ If you're about to put a tool into `services/` or an agent into `tools/`, stop a
 
 - **Ruff** (line 120, target py313, rules `E, F, W, I, UP, B, SIM`). `UP` will flag legacy Python -- use modern syntax (`match`, `X | None`, `pathlib`).
 - **Ruff format** with double quotes. Same tool handles lint + format.
-- **mypy** configured in `pyproject.toml`. Not enforced in CI yet; run locally.
+- **mypy** configured in `pyproject.toml` and enforced in CI: `uv run mypy src`.
+- **CI** (`.github/workflows/ci.yml`) runs `uv sync --locked`, ruff check, ruff format check, mypy and pytest; any failure fails the build.
+- **Docker**: multi-stage `Dockerfile`. The builder installs only what `uv.lock` pins (`uv sync --locked --no-build`, extras `ml llm api`) on a uv-managed Python; the runtime is `gcr.io/distroless/cc-debian13:nonroot` with no shell, apt or uv, so add any build step to the builder stage. It runs uvicorn from the venv and has a `HEALTHCHECK` on `/health`. A `notebook` stage (builder plus the `jupyter` extra) sits before the runtime stage for the compose `notebook` service; keep the runtime stage last so a plain build stays distroless. CI runs the image until healthy.
 - **Pre-commit** blocks files >5MB. Large data does not belong in the repo -- use DVC or cloud storage.
 - **pytest-asyncio** is in auto mode. Async tests do not need decorators.
 
@@ -90,7 +93,7 @@ If you're about to put a tool into `services/` or an agent into `tools/`, stop a
 ## Verification protocol
 
 Before reporting task complete:
-- **Code changes**: `make lint` + `make test`. Both must pass.
+- **Code changes**: `make lint` + `uv run ruff format --check .` + `uv run mypy src` + `make test`. All must pass (CI runs the same gates).
 - **API changes**: start `make api`, hit the endpoint with curl/httpx.
 - **Eval changes**: `make eval` should run without error on the golden dataset.
 - Do not report done from lint or type checks alone; run the behavior and cite what you observed.

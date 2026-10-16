@@ -67,7 +67,7 @@ ai-project-template/
   notebooks/       # numbered exploratory notebooks
   data/            # raw/ interim/ processed/ external/
   models/          # trained artifacts (gitignored)
-  Dockerfile       # uv-based image serving the FastAPI app
+  Dockerfile       # multi-stage: uv builder, distroless runtime serving the FastAPI app
   docker-compose.yml  # api + notebook services
   AGENTS.md        # canonical spec for coding agents
   CLAUDE.md        # points at AGENTS.md (Claude Code)
@@ -109,12 +109,23 @@ Call `setup_tracing()` once at app boot. Don't scatter instrumentation across bu
 - Derived artifacts go to `data/interim/` or `data/processed/`.
 - Large data belongs outside the repo (DVC, S3). Pre-commit blocks files >5MB.
 
+## Docker
+
+```bash
+docker build -t ai-project .
+docker run -p 8000:8000 ai-project    # serves src.api.main:app; GET /health
+docker compose up notebook            # Jupyter on :8888 (Dockerfile `notebook` target)
+```
+
+The `Dockerfile` ends on the runtime stage, so a plain build gives the API image. The builder copies `pyproject.toml` and `uv.lock` and runs `uv sync --locked --no-build` for the `ml`, `llm` and `api` extras on a uv-managed Python, so the image gets exactly the locked versions and no package setup scripts run. The runtime is `gcr.io/distroless/cc-debian13:nonroot`: it ships only that Python, the venv and `src/`, runs as non-root, has no shell, apt or uv, starts uvicorn from the venv and has a `HEALTHCHECK` on `/health`. Change the extras on the `uv sync` line; put any extra build step in the builder stage. The `notebook` stage is the builder plus the `jupyter` extra, used only by the compose `notebook` service. CI's Docker workflow runs the image until it reports healthy and builds the `notebook` target.
+
 ## Tooling
 
 - **uv** for deps and commands. Everything goes through `uv run ...`.
 - **Ruff** (line 120, py313, rules `E F W I UP B SIM`) for lint + format.
 - **pytest** with async auto-mode and `pytest-cov`.
-- **mypy** configured; not enforced in CI yet.
+- **mypy** configured and enforced in CI (`uv run mypy src`).
+- **CI** runs `uv sync --locked`, ruff check, ruff format check, mypy and pytest. Any failure fails the build.
 - **pre-commit** with ruff + large-file / merge-conflict hooks.
 
 ## License

@@ -15,17 +15,18 @@ make pre-commit                   # install the pre-commit hooks
 
 ## Before you open a PR
 
-`.github/workflows/ci.yml` calls the shared `python-ci.yml` workflow (`ruff check .` and `ruff format --check .`; tests are switched off with `run-tests: false`) and the shared security scan (Dependency Review on PRs plus a Trivy filesystem scan). Separate workflows run CodeQL (`python` and `actions`, `security-extended` queries), Dependency Review (fails on high severity and on GPL-3.0 or AGPL-3.0 licenses), a TruffleHog secret scan, and a Docker build with a Trivy image scan when `Dockerfile`, `pyproject.toml` or `docker.yml` change.
+`.github/workflows/ci.yml` runs a `Lint & Test` job (`uv sync --locked --no-build --extra dev --extra ml --extra api`, then, each through `uv run --locked --no-build`, `ruff check .`, `ruff format --check .`, `mypy src` and `pytest -q`; any failure fails the build) and the shared security scan (Dependency Review on PRs plus a Trivy filesystem scan, pinned to a commit SHA). Separate workflows run CodeQL (`python` and `actions`, `security-extended` queries), Dependency Review (fails on high severity and on GPL-3.0 or AGPL-3.0 licenses), a TruffleHog secret scan, and a Docker build with a Trivy image scan when `Dockerfile`, `.dockerignore`, `.python-version`, `pyproject.toml`, `uv.lock` or `docker.yml` change.
 
 Run these locally:
 
 ```bash
 uv run ruff check .
 uv run ruff format --check .
+uv run mypy src
 make test
 ```
 
-The pull request template also asks you to run the behavior, not only the checks: start `make api` and call the endpoint for API changes, and run `make eval` for eval changes. mypy is configured in `pyproject.toml` but not enforced in CI.
+The pull request template also asks you to run the behavior, not only the checks: start `make api` and call the endpoint for API changes, and run `make eval` for eval changes. If you touch the `Dockerfile`, build it and check `GET /health` on the running container; the runtime stage is distroless (no shell, apt or uv), so build steps belong in the builder stage.
 
 The pre-commit hooks run ruff (check with `--fix`, then format), whitespace and end-of-file fixers, YAML, TOML and JSON checks, a 5000 KB large-file limit, merge and case conflict checks, private-key detection, LF line endings and gitleaks.
 
@@ -44,7 +45,7 @@ These come from `AGENTS.md`, the canonical spec for this repo:
 - Ruff settings: line length 120, target py313, rules `E F W I UP B SIM`, double quotes.
 - `data/raw/` is immutable. Do not commit `.env`, API keys, model weights or raw data.
 - Commit messages follow Conventional Commits (`feat:`, `fix:`, `docs:`, `chore:`), with an optional scope such as `fix(deps):`.
-- Add a `CHANGELOG.md` entry under a concrete next version, for example `## [3.0.3] - YYYY-MM-DD`, grouped under `Added`, `Changed`, `Fixed` or `Security`.
+- Add a `CHANGELOG.md` entry under a concrete next version, for example `## [3.1.1] - YYYY-MM-DD`, grouped under `Added`, `Changed`, `Fixed` or `Security`.
 - Fill in the pull request template: type of change, affected domains and test plan.
 
 ## Security issues

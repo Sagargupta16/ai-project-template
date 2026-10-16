@@ -7,7 +7,10 @@ on:
   pull_request:
     paths:
       - "Dockerfile"
+      - ".dockerignore"
+      - ".python-version"
       - "pyproject.toml"
+      - "uv.lock"
       - ".github/workflows/docker.yml"
   workflow_dispatch:
 
@@ -57,6 +60,30 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           load: true  # Always load locally for Trivy scan
+
+      - name: Smoke test (container turns healthy and serves /health)
+        env:
+          IMAGE: ${{ fromJSON(steps.meta.outputs.json).tags[0] }}
+        run: |
+          docker run -d --name smoke -p 8000:8000 "$IMAGE"
+          status=starting
+          for _ in $(seq 1 30); do
+            status=$(docker inspect --format '{{.State.Health.Status}}' smoke)
+            if [ "$status" = "healthy" ]; then break; fi
+            sleep 3
+          done
+          echo "health: $status"
+          if [ "$status" != "healthy" ]; then
+            docker logs smoke
+            exit 1
+          fi
+          curl -fsS http://127.0.0.1:8000/health
+          docker rm -f smoke
+
+      - name: Build notebook target (docker compose `notebook` service)
+        run: |
+          docker build --target notebook -t notebook-smoke .
+          docker run --rm notebook-smoke jupyter --version
 
       - name: Trivy vulnerability scan
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
