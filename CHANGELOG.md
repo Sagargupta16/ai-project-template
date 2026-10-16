@@ -3,6 +3,10 @@
 ## [3.1.0] - 2026-10-16
 
 ### Security
+- Close the advisories that opened after #61 merged, with floors at the fixed versions and a targeted re-lock (`uv lock -P jupyter-server -P mcp -P strawberry-graphql`):
+  - `strawberry-graphql` 0.320.4 -> 0.332.0 (Dependabot high, fixed 0.326.1, and low, fixed 0.327.2). `arize-phoenix` 19 pins 0.320.4, so the `eval` extra moves to `arize-phoenix` 20.22.0, which brings `fastmcp-slim` 4.1.0, `mcp` 2.3.0 and `sqlalchemy` 2.1.4 with it. Nothing in `src/` imports any of them.
+  - `mcp` 1.28.1 -> 2.3.0 (Dependabot medium, fixed 1.30.0).
+  - `jupyter-server` 2.20.0 -> 2.21.1 (Trivy high CVE-2026-86049, fixed 2.21.0); the `jupyter` extra floor moves to `>=2.21.0`.
 - Rebuild the `Dockerfile` as two stages. The builder copies `pyproject.toml` and `uv.lock` and runs `uv sync --locked --no-dev --no-install-project --no-build --extra ml --extra llm --extra api`, so the image gets exactly the locked versions, from wheels only, and no package setup script runs. Before, only `pyproject.toml` was copied, so every build re-resolved from scratch (SonarCloud docker:S8541 and docker:S8544 on both `uv sync` lines and the `uv run` CMD).
 - The runtime base moves from `python:3.14-slim` to `gcr.io/distroless/cc-debian13:nonroot` with a uv-managed Python 3.14: no shell, apt, uv or pip, and it runs as uid 65532. On 2026-10-16 Trivy found 172 issues in `python:3.14-slim` alone (166 Debian packages, 164 with no fixed version, plus urllib3 2.7.0, msgpack 1.1.2 and setuptools 70.3.0 vendored in the base image's pip 26.2.1, not in the app venv) and 31 in the distroless base (23 medium, 8 low, none fixable).
 - The builder deletes the pip bundled with the managed Python, which carries the same vendored urllib3, msgpack and setuptools. Nothing at runtime uses it.
