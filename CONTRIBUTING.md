@@ -15,7 +15,7 @@ make pre-commit                   # install the pre-commit hooks
 
 ## Before you open a PR
 
-`.github/workflows/ci.yml` runs a `Lint & Test` job (`uv sync --locked --extra dev --extra ml --extra api`, then `ruff check .`, `ruff format --check .`, `mypy src` and `pytest -q`; any failure fails the build) and the shared security scan (Dependency Review on PRs plus a Trivy filesystem scan, pinned to a commit SHA). Separate workflows run CodeQL (`python` and `actions`, `security-extended` queries), Dependency Review (fails on high severity and on GPL-3.0 or AGPL-3.0 licenses), a TruffleHog secret scan, and a Docker build with a Trivy image scan when `Dockerfile`, `.dockerignore`, `.python-version`, `pyproject.toml`, `uv.lock` or `docker.yml` change.
+`.github/workflows/ci.yml` runs a `Lint & Test` job (`uv sync --locked --no-build --extra dev --extra ml --extra api`, then, each through `uv run --locked --no-build`, `ruff check .`, `ruff format --check .`, `mypy src` and `pytest -q`; any failure fails the build) and the shared security scan (Dependency Review on PRs plus a Trivy filesystem scan, pinned to a commit SHA). Separate workflows run CodeQL (`python` and `actions`, `security-extended` queries), Dependency Review (fails on high severity and on GPL-3.0 or AGPL-3.0 licenses), a TruffleHog secret scan, and a Docker build with a Trivy image scan when `Dockerfile`, `.dockerignore`, `.python-version`, `pyproject.toml`, `uv.lock` or `docker.yml` change.
 
 Run these locally:
 

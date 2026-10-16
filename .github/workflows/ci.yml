@@ -18,19 +18,19 @@ jobs:
         uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
 
       - name: Install dependencies
-        run: uv sync --locked --extra dev --extra ml --extra api
+        run: uv sync --locked --no-build --extra dev --extra ml --extra api
 
       - name: Ruff check
-        run: uv run ruff check .
+        run: uv run --locked --no-build ruff check .
 
       - name: Ruff format check
-        run: uv run ruff format --check .
+        run: uv run --locked --no-build ruff format --check .
 
       - name: Mypy
-        run: uv run mypy src
+        run: uv run --locked --no-build mypy src
 
       - name: Pytest
-        run: uv run pytest -q
+        run: uv run --locked --no-build pytest -q
 
   security:
     uses: Sagargupta16/shared-workflows/.github/workflows/security-scan.yml@a90df0cdc89c85295764a85849b42d618747525a # main
