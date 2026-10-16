@@ -29,7 +29,11 @@ def train_model(
         X, y, test_size=settings.ml.test_size, random_state=settings.ml.random_seed
     )
 
-    model = RandomForestClassifier(random_state=settings.ml.random_seed)
+    model = RandomForestClassifier(
+        min_samples_leaf=settings.ml.min_samples_leaf,
+        max_features=settings.ml.max_features,
+        random_state=settings.ml.random_seed,
+    )
     model.fit(X_train, y_train)
 
     score = model.score(X_test, y_test)

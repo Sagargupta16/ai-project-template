@@ -13,7 +13,9 @@ services:
       - PYTHONUNBUFFERED=1
 
   notebook:
-    build: .
+    build:
+      context: .
+      target: notebook
     container_name: ai_notebook
     ports:
       - "8888:8888"
@@ -24,4 +26,3 @@ services:
       - ./src:/app/src
     env_file:
       - .env
-    command: uv run jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --allow-root

@@ -1,6 +1,6 @@
 [project]
 name = "ai-project-template"
-version = "0.3.1"
+version = "3.1.0"
 description = "Unified Python template for ML, LLM, RAG, and agent projects"
 requires-python = ">=3.13"
 license = "MIT"
