@@ -1,5 +1,20 @@
 # Changelog
 
+## [3.1.1] - 2026-10-24
+
+### Security
+- Close all 62 open Dependabot alerts with new `[tool.uv] constraint-dependencies` floors at each fixed version and a targeted re-lock (`uv lock -P certifi -P fastmcp-slim -P filelock -P nbconvert -P opentelemetry-api -P pillow -P setuptools -P virtualenv`):
+  - `pillow` 12.3.0 -> 13.0.0 (41 alerts, 5 critical, listed under both `Pillow` and `pillow`; fixed 13.0.0). Comes in through `matplotlib` in the `ml` extra.
+  - `certifi` 2026.7.22 -> 2026.10.23 (critical, emSign root CAs with compromised intermediate keys; fixed 2026.10.19).
+  - `virtualenv` 21.14.5 -> 21.14.13 (12 alerts: 4 high, 5 medium, 3 low; fixed 21.14.7 and 21.14.9), through `pre-commit` in the `dev` extra.
+  - `filelock` 3.32.0 -> 4.2.4 (high ReadWriteLock symlink overwrite and 2 low Windows lock issues; fixed 4.2.1).
+  - `nbconvert` 7.17.1 -> 7.17.2 (high, path traversal in cell output filenames).
+  - `fastmcp-slim` 4.1.0 -> 4.1.3 (2 medium, authorization skip and OAuth issuer binding; fixed 4.1.2).
+  - `opentelemetry-api` 1.44.0 -> 1.45.1 (medium, unbounded tracestate parsing).
+  - `setuptools` 83.0.0 -> 84.2.1 (low, Windows path escape in legacy wheel install; fixed 84.1.0), through `torch`.
+- The re-lock moves the rest of the OpenTelemetry family with `opentelemetry-api` (1.45.1 / 0.66b1), and `logfire` 4.39.0 -> 5.3.0 (from `pydantic-ai`'s `logfire` extra), `openapi-pydantic` 0.5.1 -> 0.6.0 and `packaging` 26.2 -> 26.3 with them. Nothing in `src/` imports any of these.
+- Not changed: the image's 31 Trivy OS findings (glibc `2.41-12+deb13u4`, gcc-14 `14.2.0-19`, zlib `1:1.3.dfsg+really1.3.1-1`) are still unfixed in Debian trixie, the newest base distroless ships. The 11 Trivy `gcp-service-account` hits are the anthropic SDK docstring text `{"type": "service_account"}` in `resources/beta/agents/` and `types/beta/`, not a key.
+
 ## [3.1.0] - 2026-10-16
 
 ### Security

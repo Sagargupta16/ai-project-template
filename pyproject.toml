@@ -1,6 +1,6 @@
 [project]
 name = "ai-project-template"
-version = "3.1.0"
+version = "3.1.1"
 description = "Unified Python template for ML, LLM, RAG, and agent projects"
 requires-python = ">=3.13"
 license = "MIT"
@@ -103,14 +103,30 @@ all = [
 # tornado: multipart DoS + cookie injection fix (< 6.5.8)
 # mcp: Dependabot medium, fixed in 1.30.0
 # strawberry-graphql: Dependabot high (fixed 0.326.1) and low (fixed 0.327.2)
+# certifi: emSign roots with compromised intermediate keys (< 2026.10.19)
+# fastmcp-slim: authorization skip + OAuth issuer binding (< 4.1.2)
+# filelock: ReadWriteLock symlink/journal overwrite + Windows lock issues (<= 4.2.0)
+# nbconvert: path traversal in cell output filenames (<= 7.17.1)
+# opentelemetry-api: unbounded tracestate parsing (<= 1.45.0)
+# pillow: 41 advisories, all fixed in 13.0.0
+# setuptools: Windows path escape in legacy wheel install (< 84.1.0)
+# virtualenv: activation script injection + seeding issues (< 21.14.9)
 constraint-dependencies = [
+    "certifi>=2026.10.19",
     "cryptography>=50.0.0",
+    "fastmcp-slim>=4.1.2",
+    "filelock>=4.2.1",
     "h2>=4.4.1",
     "httpcore2>=2.10.0",
     "httpx2>=2.12.0",
     "mcp>=1.30.0",
+    "nbconvert>=7.17.2",
+    "opentelemetry-api>=1.45.1",
+    "pillow>=13.0.0",
+    "setuptools>=84.1.0",
     "strawberry-graphql>=0.327.2",
     "tornado>=6.5.8",
+    "virtualenv>=21.14.9",
 ]
 
 [build-system]
