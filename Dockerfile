@@ -4,7 +4,7 @@
 
 FROM debian:trixie-slim AS builder
 
-COPY --from=ghcr.io/astral-sh/uv:0.13.1 /uv /uvx /bin/
+COPY --from=ghcr.io/astral-sh/uv:0.13.6 /uv /uvx /bin/
 
 ENV UV_COMPILE_BYTECODE=1 \
     UV_LINK_MODE=copy \
