@@ -33,7 +33,7 @@ jobs:
         run: uv run --locked --no-build pytest -q
 
   security:
-    uses: Sagargupta16/shared-workflows/.github/workflows/security-scan.yml@a028c042699a1519d0e95025d6d3fafbf6d615cd # main
+    uses: Sagargupta16/shared-workflows/.github/workflows/security-scan.yml@526859720d9ce8689f230dafbfa4e40d798b83cb # main
     permissions:
       contents: read
       security-events: write
