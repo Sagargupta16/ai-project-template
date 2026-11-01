@@ -1,5 +1,10 @@
 # Changelog
 
+## [3.1.2] - 2026-11-01
+
+### Removed
+- The TruffleHog secret-scan workflow (`secret-scan.yml`) and its AGPL licence exception in `dependency-review.yml`. GitHub secret scanning with push protection and GitGuardian already check every push and PR, so it was a third copy of the same check on every run.
+
 ## [3.1.1] - 2026-10-24
 
 ### Security
