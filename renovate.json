@@ -1,1 +1,11 @@
-{"$schema":"https://docs.renovatebot.com/renovate-schema.json","extends":["github>Sagargupta16/shared-workflows"]}
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["github>Sagargupta16/shared-workflows"],
+  "packageRules": [
+    {
+      "matchDepNames": ["python"],
+      "allowedVersions": "<3.15",
+      "description": "Python stays below 3.15. PyYAML 6.0.3, the latest release, ships no cp315 wheel (yaml/pyyaml#981 and #994, open on 2026-11-01) and reaches the lock through uvicorn[standard] and pre-commit, while CI and the Docker build sync with --no-build, so every 3.15 bump fails Lint & Test and Build & scan. Remove this rule once PyYAML publishes cp315 wheels."
+    }
+  ]
+}
